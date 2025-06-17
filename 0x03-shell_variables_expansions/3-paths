@@ -1,0 +1,4 @@
+#!/bin/bash
+# Count the number of directories in PATH, treating empty entries as valid
+
+echo "$PATH" | awk -F: '{ print NF }'
