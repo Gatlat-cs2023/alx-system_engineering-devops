@@ -1,2 +1,2 @@
 #!/bin/bash
-readarray -d : -t dirs <<< "$PATH"; echo "${#dirs[@]}"
+echo "$PATH" | tr ':' '\n' | wc -l
