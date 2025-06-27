@@ -1,0 +1,4 @@
+#!/bin/bash
+# 0-use_a_private_key - Connects to a server using the private key ~/.ssh/school
+
+ssh -i ~/.ssh/school ubuntu@8.8.8.8
