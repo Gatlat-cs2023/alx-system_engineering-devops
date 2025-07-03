@@ -1,5 +1,4 @@
-#!/bin/bash
-# Connects to a server using SSH with a private key
-# Usage: ./0-use_a_private_key
+#!/usr/bin/env bash
+# Connects to a server using SSH with a specific private key
 
-ssh -i ~/.ssh/school ubuntu@8.8.8.8
+ssh -i ~/.ssh/school ubuntu@3.95.245.234
