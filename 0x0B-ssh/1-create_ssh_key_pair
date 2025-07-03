@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Creates an RSA SSH key pair with specified parameters
+
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/school -N "betty"vvv#!/usr/bin/env bash
+# Creates an RSA SSH key pair with specified parameters
+
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/school -N "betty"
