@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# Script to install and configure HAProxy as a load balancer
+
+# Update and install HAProxy
+apt-get update -y
+apt-get install -y haproxy
+
+# Backup the original HAProxy config
+cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.bak
+
+# Get hostname of web servers
+WEB1_IP="X.X.X.X"    # Replace with your actual web-01 private IP
+WEB2_IP="Y.Y.Y.Y"    # Replace with your actual web-02 private IP
+
+# Overwrite haproxy.cfg with load balancer config
+cat <<EOF > /etc/haproxy/haproxy.cfg
+global
+    log /dev/log    local0
+    log /dev/log    local1 notice
+    chroot /var/lib/haproxy
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
+
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    timeout connect 5000
+    timeout client  50000
+    timeout server  50000
+
+frontend http_front
+    bind *:80
+    default_backend http_back
+
+backend http_back
+    balance roundrobin
+    server web1 ${WEB1_IP}:80 check
+    server web2 ${WEB2_IP}:80 check
+EOF
+
+# Enable HAProxy to start on boot
+sed -i 's/ENABLED=0/ENABLED=1/' /etc/default/haproxy
+
+# Restart HAProxy to apply config
+service haproxy restart
