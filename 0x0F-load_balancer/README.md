@@ -53,6 +53,7 @@ This task automates the same behavior as Task 0, but using Puppet for declarativ
 Check which web server served your request:
 ```bash
 curl -sI http://<server-ip> | grep X-Served-By
+```
 
 ---
 
