@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Script to install and configure nginx to respond with "Hello World!"
+
+# Exit on any error
+set -e
+
+# Install nginx silently
+apt-get update -y
+apt-get install nginx -y
+
+# Set up custom HTML page
+echo "Hello World!" > /var/www/html/index.html
+
+# Start nginx using service command (not systemctl)
+service nginx start
+-+
