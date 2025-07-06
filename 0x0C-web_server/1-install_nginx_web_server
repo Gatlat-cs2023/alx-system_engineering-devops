@@ -12,5 +12,5 @@ apt-get install nginx -y
 echo "Hello World!" > /var/www/html/index.html
 
 # Start nginx using service command (not systemctl)
-service nginx start
+service nginx start || service nginx restart
 -+
