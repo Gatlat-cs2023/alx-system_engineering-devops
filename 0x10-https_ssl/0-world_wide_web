@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Script to audit subdomain DNS records
+# Script to audit subdomain DNS records for gatlatboth.com by default
 
-# Function to get DNS record
+# Function to get DNS record info
 get_record_info() {
   local full_domain="$1"
   dig "$full_domain" +short | awk -v subdomain_name="$full_domain" 'NR==1 {
     if ($0 ~ /^[0-9.]+$/) {
-      print "The subdomain " subdomain_name " is a A record and points to " $0
+      print "The subdomain " subdomain_name " is an A record and points to " $0
     } else {
       print "The subdomain " subdomain_name " is not an A record or has no DNS entry"
     }
@@ -14,8 +14,8 @@ get_record_info() {
 }
 
 # Main logic
-domain=$1
-subdomain=$2
+domain="${1:-gatlatboth.com}"   # Use first argument or default to gatlatboth.com
+subdomain="$2"
 
 if [ -z "$subdomain" ]; then
   for sub in www lb-01 web-01 web-02
