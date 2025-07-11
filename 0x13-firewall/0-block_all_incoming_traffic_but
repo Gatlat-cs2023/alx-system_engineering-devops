@@ -1,11 +1,24 @@
 #!/usr/bin/env bash
-# Configure UFW to allow only ports 22, 80, 443 and block the rest
+# Secure UFW setup script
 
-apt-get update
-apt-get install ufw -y
+# Require root
+[ "$(id -u)" -ne 0 ] && echo "Please run as root" && exit 1
 
+# Update and install UFW
+apt-get update || { echo "apt-get update failed"; exit 1; }
+apt-get install -y ufw || { echo "Failed to install UFW"; exit 1; }
+
+# Reset firewall to avoid conflicts
+ufw --force reset
+
+# Set default policy and allow required ports
 ufw default deny incoming
 ufw allow 22/tcp
 ufw allow 80/tcp
 ufw allow 443/tcp
+
+# Enable UFW
 ufw --force enable
+
+# Show status
+ufw status verbose
