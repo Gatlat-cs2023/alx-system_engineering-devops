@@ -1,27 +1,26 @@
-#!/usr/bin/env bash
-# Script to audit subdomain DNS records for gatlatboth.com by default
+#!/bin/bash
 
-# Function to get DNS record info
-get_record_info() {
+# Function to extract DNS record info using dig and awk
+get_dns_info() {
   local full_domain="$1"
-  dig "$full_domain" +short | awk -v subdomain_name="$full_domain" 'NR==1 {
-    if ($0 ~ /^[0-9.]+$/) {
-      print "The subdomain " subdomain_name " is an A record and points to " $0
-    } else {
-      print "The subdomain " subdomain_name " is not an A record or has no DNS entry"
-    }
-  }'
+  dig "$full_domain" | awk '/^;; ANSWER SECTION:/ {getline; print}'
 }
 
 # Main logic
-domain="${1:-gatlatboth.com}"   # Use first argument or default to gatlatboth.com
-subdomain="$2"
+domain=$1
+subdomain=$2
 
+# Disable SC2086 warning and handle lookup
 if [ -z "$subdomain" ]; then
-  for sub in www lb-01 web-01 web-02
-  do
-    get_record_info "$sub.$domain"
+  for name in www lb-01 web-01 web-02; do
+    record=$(get_dns_info "${name}.${domain}")
+    type=$(echo $record | awk '{print $3}')
+    destination=$(echo $record | awk '{print $5}')
+    echo "The subdomain $name is a $type record and points to $destination"
   done
 else
-  get_record_info "$subdomain.$domain"
+  record=$(get_dns_info "${subdomain}.${domain}")
+  type=$(echo $record | awk '{print $3}')
+  destination=$(echo $record | awk '{print $5}')
+  echo "The subdomain $subdomain is a $type record and points to $destination"
 fi
