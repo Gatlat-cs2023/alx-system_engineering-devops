@@ -14,12 +14,13 @@ defaults
     timeout client  50000ms
     timeout server  50000ms
 
+# Redirect all HTTP requests to HTTPS with 301 (Moved Permanently)
 frontend http-in
     bind *:80
     mode http
-    # Redirect all HTTP requests to HTTPS (301 Moved Permanently)
-    redirect scheme https code 301 if !{ ssl_fc }
+    redirect scheme https code 301
 
+# SSL termination and routing to backend
 frontend https-in
     bind *:443 ssl crt /etc/haproxy/certs/gatlatboth.com.pem
     mode http
